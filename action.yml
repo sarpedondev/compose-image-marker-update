@@ -1,0 +1,72 @@
+name: Compose Image Marker Update
+description: Update Docker Compose image lines using marker comments like "# image-tag:backend".
+
+branding:
+  icon: refresh-cw
+  color: blue
+
+inputs:
+  repo:
+    description: Repository to update, for example owner/repo. Defaults to the current repository.
+    required: false
+    default: ""
+
+  branch:
+    description: Branch to update.
+    required: false
+    default: main
+
+  token:
+    description: GitHub token with write access to the target repository.
+    required: true
+
+  image:
+    description: Full image reference to write, for example ghcr.io/acme/api:sha123.
+    required: true
+
+  marker:
+    description: Marker name. The action looks for "# image-tag:<marker>".
+    required: true
+
+  files:
+    description: Newline or space separated glob patterns to search.
+    required: false
+    default: |
+      **/*.yml
+      **/*.yaml
+
+  marker-prefix:
+    description: Marker prefix.
+    required: false
+    default: image-tag
+
+  commit-message:
+    description: Commit message.
+    required: false
+    default: ""
+
+  git-user-name:
+    description: Git commit user name.
+    required: false
+    default: github-actions[bot]
+
+  git-user-email:
+    description: Git commit user email.
+    required: false
+    default: github-actions[bot]@users.noreply.github.com
+
+  fail-on-missing:
+    description: Fail if no matching marker is found.
+    required: false
+    default: "true"
+
+outputs:
+  changed:
+    description: Whether any file changed.
+
+  files:
+    description: Comma-separated list of changed files.
+
+runs:
+  using: node20
+  main: index.js
